@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+  <title>Toxi*City</title> 
+  <link rel="StyleSheet" href="style.css" type="text/css" />
+  <script type="text/javascript">
+  // This project currently only runs in Chrome or Safari-- not Firefox
+  
+   var vidlocationA = "Narratives/A_clips/";
+   var vidlocationB = "Narratives/B_clips/";
+   var vidlocationC = "Chorus/";
+   var vidlocationD = "Intro/";
+   var vidlocationE = "Endings/";
+   var vidlocationF = "Interludes/";
+    
+ 
+   var storyA_Clips = ['01_Story-CM-1A.mov','02_Story-CM-2A.mov','03_Story-FM-2A.mov','04_Story-FM-3A.mov','05_Story-MW-1A.mov','06_Story-MW-2A.mov','07_Story-TB-1A.mov','08_Story-TB-3A.mov','09_Story-TB-4A.mov','10_Story-YW-2A.mov','11_Story-YW-3A.mov','12_FEMA_2A.mov','14_Story-YW-1A.mov']; // All first narrative clips 13 total
+   var storyB_Clips = ['01_Story-CM-1B.mov','02_Story-CM-2B.mov','03_Story-FM-2B.mov','04_Story-FM-3B.mov','05_Story-MW-1B.mov','06_Story-MW-2B.mov','07_Story-TB-1B.mov','08_Story-YW-3B.mov','10_Story-YW-2B.mov','12_FEMA_1B.mov','13_FEMA_3B.mov']; // All second narrative clips 14 total
+   var chorus_Clips = ['01_Benjamin-Aram.mov','02_Bernice1-Chris.mov','03_Bruce-Cindy.mov','04_Dhyanesh-Cindy.mov','05_Ernest-Don.mov','07_Fletcher-Kamili.mov','08_George-CC.mov','09_Gracie-Alice.mov','10_Joseph-Aram.mov','12_Karyl-Rod.mov','13_Margaret-Don.mov','14_Marylou-Cindy.mov','15_Mudiwa-Aram.mov','16_Robert-Cindy.mov','17_Thomas-DS.mov','18_Walter-saskia.mov','19_William1-Steve.mov','20_Erwin.mov','21_Gary-RG.mov','22_Maureen-DS.mov','23_Augustine-DS.mov','24_Everets-DD.mov','25_LaurenDS.mov']; // All death chorus clips
+   var intro_Clips = ['BeginA.mov','BeginB.mov']; // All titles + begin clips
+   var ending_Clips = ['EndingA.mov']; // All ending clips
+   var interlude_Clips = ['AUDIO-INTERLUDE1.mov','AUDIO-INTERLUDE2.mov']; // All ending clips
+   
+var i = 0;
+   
+function rand_range(max) {
+    return Math.floor(Math.random()*(max+1));
+  }
+  
+function choose(array) {
+    return array[rand_range(array.length-1)];
+  }
+
+function create_video_Intro() {
+	
+    var video = main.appendChild(document.createElement('video'));
+	video.id = "videoIntro";
+    video.src = vidlocationD + choose(intro_Clips);
+	video.load();
+	video.autoplay = true;
+    video.addEventListener('ended', create_video_A, false);
+	};
+	
+function create_video_A() {
+	var videoIntro = document.getElementById("videoIntro");
+	main.removeChild(videoIntro);
+	
+    var video = main.appendChild(document.createElement('video'));
+    
+    var selectVideo = choose(storyA_Clips);
+	video.id = "videoA";
+    video.src = vidlocationA + selectVideo;
+	video.load();
+	video.autoplay = true;
+  	i++;
+	
+	var a = storyA_Clips.indexOf(selectVideo);
+	storyA_Clips.splice(a,1);
+	console.log(storyA_Clips);
+    video.addEventListener('ended', create_video_B, false);
+	};
+     
+function create_video_B() {
+	var videoA = document.getElementById("videoA");
+	main.removeChild(videoA);
+	
+	
+	var video = main.appendChild(document.createElement('video'));
+	var selectVideo = choose(storyB_Clips);
+	video.id = "videoB";
+    video.src = vidlocationB + selectVideo;
+	video.load();
+	video.play();
+	
+	var a = storyB_Clips.indexOf(selectVideo);
+	storyB_Clips.splice(a,1);
+	console.log(storyB_Clips);
+	video.addEventListener('ended', create_video_Chorus, false);
+ };
+  
+function create_video_Chorus() {
+	var videoB = document.getElementById("videoB");
+	main.removeChild(videoB);
+	
+	var video = main.appendChild(document.createElement('video'));
+	
+	var selectVideo = choose(chorus_Clips);
+	video.id = "videoC";
+    video.src = vidlocationC + selectVideo;
+	video.load();
+	video.play();
+	
+	var a = chorus_Clips.indexOf(selectVideo);
+	chorus_Clips.splice(a,1);
+	console.log(chorus_Clips);
+	video.addEventListener('ended', create_video_A2, false);
+ };
+ 
+ function create_video_A2() {
+ 	var videoC = document.getElementById("videoC");
+ 	main.removeChild(videoC);
+ 	
+ 	var video = main.appendChild(document.createElement('video'));
+	
+	var selectVideo = choose(storyA_Clips);
+	video.id = "videoA";
+    video.src = vidlocationA + selectVideo;
+	video.load();
+	video.play();
+	i++;
+	
+	var a = storyA_Clips.indexOf(selectVideo);
+	storyA_Clips.splice(a,1);
+	console.log(storyA_Clips);
+    
+	if (i < 4) {
+		video.addEventListener('ended', create_video_B, false);
+		
+	} else {
+		video.addEventListener('ended', create_video_Ending, false);
+	}
+ 	
+  };
+  
+function create_video_Ending() {
+ 	var videoC = document.getElementById("videoA");
+ 	main.removeChild(videoA);
+ 	
+ 	var video = main.appendChild(document.createElement('video'));
+ 	var selectVideo = choose(ending_Clips);
+ 	video.id = "videoEnding";
+ 	video.src = vidlocationE + selectVideo;
+	video.load();
+	video.play();
+	video.addEventListener('ended', create_video_Interlude, false); 	
+  };
+  
+function create_video_Interlude() {
+ 	var videoEnding = document.getElementById("videoEnding");
+ 	main.removeChild(videoEnding);
+ 	
+ 	var video = main.appendChild(document.createElement('video'));
+ 	
+ 	var selectVideo = choose(interlude_Clips);
+ 	video.id = "videoInterlude";
+ 	video.src = vidlocationF + selectVideo;
+	video.load();
+	video.play();
+	
+	var i = 0;
+	video.addEventListener('ended', page_reload, false); 	
+  };
+  
+	
+function page_reload() { 
+document.location.reload(true);
+};
+   
+</script>  	
+</head>
+<body onload="create_video_Intro();">
+<div id="main">
+	<p></p>
+</div>
+</body>
+</html>
